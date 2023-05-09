@@ -119,6 +119,22 @@ def intéract():
             Telephone= input('Quel est le numéro de téléphone de votre contact : ')
             Email = input('Quel est le mail de votre contact : ')
             Adresse_postale= input("Quel est l'adresse_postale de votre contact : ")
+            try: 
+                Telephone_test = re.match(format_tel, Telephone)
+                while Telephone_test == None:
+                    print("Respecter la norme d'input : 0x-xx-xx-xx-xx")
+                    Telephone = input('Quel est le numéro de téléphone de votre contact : ')
+                    Telephone_test = re.match(format_tel, Telephone)
+            except:
+                print("")
+            try: 
+                Email_test = re.match(format_email, Email)
+                while Email_test == None:
+                    print("Respecter la norme d'input : test@test.com")
+                    Telephone = input('Quel est le mail de votre contact : ')
+                    Telephone_test = re.match(format_email, Email)
+            except:
+                print("")
             nouveau(Nom,Prenom,Surnom,Telephone,Email,Adresse_postale)
             print("ajout du contact réussie")
             print("\n")
@@ -153,6 +169,22 @@ def intéract():
             Telephone= input('Quel est le numéro de téléphone de votre contact a mettre a jour : ')
             Email= input('Quel est le mail de votre contact a mettre a jour : ')
             Adresse_postale= input("Quel est l'adresse de votre contact a mettre a jour : ")
+            try: 
+                Telephone_test = re.match(format_tel, Telephone)
+                while Telephone_test == None:
+                    print("Respecter la norme d'input : 0x-xx-xx-xx-xx")
+                    Telephone = input('Quel est le numéro de téléphone de votre contact : ')
+                    Telephone_test = re.match(format_tel, Telephone)
+            except:
+                print("")
+            try: 
+                Email_test = re.match(format_email, Email)
+                while Email_test == None:
+                    print("Respecter la norme d'input : test@test.com")
+                    Telephone = input('Quel est le mail de votre contact : ')
+                    Telephone_test = re.match(format_email, Email)
+            except:
+                print("")
             MAJ(Loca_update, New_data, Nom, Prenom, Surnom, Telephone, Email, Adresse_postale)
             print("\n")
             print("\n")
@@ -170,7 +202,23 @@ for arg in sys.argv:
                 Téléphone = input("Quel est le numéro Téléphone:")
                 Email = input("Quel est l'Email:")
                 Adresse_postale = input("Quel est l'adresse postale:")
-                nouveau(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
+                try: 
+                    Telephone_test = re.match(format_tel, Telephone)
+                    while Telephone_test == None:
+                        print("Respecter la norme d'input : 0x-xx-xx-xx-xx")
+                        Telephone = input('Quel est le numéro de téléphone de votre contact : ')
+                        Telephone_test = re.match(format_tel, Telephone)
+                except:
+                    print("")
+                try: 
+                    Email_test = re.match(format_email, Email)
+                    while Email_test == None:
+                        print("Respecter la norme d'input : test@test.com")
+                        Telephone = input('Quel est le mail de votre contact : ')
+                        Telephone_test = re.match(format_email, Email)
+                except:
+                    print("")
+                    nouveau(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
                 print("le nouveau contact a été ajouter")
                 break
             if sys.argv[1] == "delete":
@@ -215,6 +263,22 @@ for arg in sys.argv:
                 Telephone= input('Quel est le numéro de téléphone de votre contact a mettre a jour : ')
                 Email= input('Quel est le mail de votre contact a mettre a jour : ')
                 Adresse_postale= input("Quel est l'adresse de votre contact a mettre a jour : ")
+                try: 
+                    Telephone_test = re.match(format_tel, Telephone)
+                    while Telephone_test == None:
+                        print("Respecter la norme d'input : 0x-xx-xx-xx-xx")
+                        Telephone = input('Quel est le numéro de téléphone de votre contact : ')
+                        Telephone_test = re.match(format_tel, Telephone)
+                except:
+                    print("")
+                try: 
+                    Email_test = re.match(format_email, Email)
+                    while Email_test == None:
+                        print("Respecter la norme d'input : test@test.com")
+                        Telephone = input('Quel est le mail de votre contact : ')
+                        Telephone_test = re.match(format_email, Email)
+                except:
+                    print("")
                 MAJ(Loca_update, New_data, Nom, Prenom, Surnom, Telephone, Email, Adresse_postale)
                 break
             if sys.argv[1] == "?":
