@@ -36,15 +36,23 @@ def supprimer(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale):
     except sqlite3.Error as error:
         print("Erreur lors du suppression du contact", error)
 
-def liste():
+def liste(): #Changer le style
     try:
-        afficher ='''SELECT * FROM contacts'''
-        result = cur.execute(afficher).fetchall()
-        print(result)
+        sql = '''Select * from Contacts'''
+        result = cur.execute(sql)
+        result = cur.fetchall()
+        print("Il y a un total de ", len(result), "contacts")
+        for row in result:
+            print("\n")
+            print("Nom: ", row[0])
+            print("Prénom: ", row[1])
+            print("Surnom: ", row[2])
+            print("Téléphone: ", row[3])
+            print("Email: ", row[4])
+            print("Adresse: ", row[5])
         con.commit()
-
     except sqlite3.Error as error:
-        print("Erreur lors de l'affichage !", error)
+        print("erreur lors de l'affichage de la liste !", error)
 
 def search(zone, rechercher):
     try:
@@ -107,7 +115,7 @@ def aide():
 
 def intéract():
     choix = None
-    print("Bienvenue dans en mode intéractif")
+    print("Bienvenue en mode intéractif")
     while choix != "bye":
         print("Tapez 1 pour ajouter un contact ")
         print("Tapez 2 pour supprimer un contact ")
