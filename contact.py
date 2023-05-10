@@ -3,18 +3,26 @@ import sys
 import re
 format_tel = "[0][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
 format_email = "^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-con = sqlite3.connect("contact.db")
+con = sqlite3.connect("contact")
 cur = con.cursor()
-
+Table = '''CREATE TABLE IF NOT EXISTS "contacts" (
+	"Nom"	TEXT,
+	"Prénom"	TEXT,
+	"Surnom"	TEXT,
+	"Téléphone"	TEXT,
+	"Email"	TEXT,
+	"Adresse_postale"	TEXT
+);'''
+cur.execute(Table)
 
 def nouveau(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale):
     try:
+        
         new_contact ='''INSERT INTO contacts VALUES(?, ?, ?, ?, ?, ?)'''
         insert = (Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
         cur.execute(new_contact, insert)
         con.commit()
-        cur.close
-        con.close
+
     except sqlite3.Error as error:
         print("Erreur lors de l'ajout du contact !", error)
 
@@ -24,8 +32,7 @@ def supprimer(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale):
         insert = (Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
         cur.execute(suppr, insert)
         con.commit()
-        cur.close()
-        con.close()
+
     except sqlite3.Error as error:
         print("Erreur lors du suppression du contact", error)
 
@@ -35,8 +42,7 @@ def liste():
         result = cur.execute(afficher).fetchall()
         print(result)
         con.commit()
-        cur.close()
-        con.close()
+
     except sqlite3.Error as error:
         print("Erreur lors de l'affichage !", error)
 
@@ -59,8 +65,7 @@ def search(zone, rechercher):
         result = cur.fetchall()
         print(result)
         con.commit()
-        cur.close()
-        con.close()
+
     except sqlite3.Error as error:
         print("Erreur lors de la recherche !", error)
 
@@ -81,8 +86,7 @@ def MAJ(Loca_update,New_data,Nom, Prenom, Surnom, Téléphone, Email, Adresse_po
         Update = (New_data,Nom, Prenom, Surnom, Téléphone, Email, Adresse_postale)
         cur.execute(Cmd, Update)
         con.commit()
-        cur.close()
-        con.close()  
+ 
     except sqlite3.Error as error:
         print("Erreur lors de la mise à jour ! ", error)
 
@@ -104,13 +108,14 @@ def aide():
 def intéract():
     choix = None
     print("Bienvenue dans en mode intéractif")
-    while choix != "au revoir":
+    while choix != "bye":
         print("Tapez 1 pour ajouter un contact ")
         print("Tapez 2 pour supprimer un contact ")
         print("Tapez 3 pour voir vos contacts ")
         print("Tapez 4 pour rechercher un ou plusieurs contacts ")
         print("Tapez 5 pour modifier un contact ")
         print("Tapez 6 pour de l'aide ")
+        print("Tapez bye pour quitter le mode interactif")
         choix = input("Que voulez vous faire ? : ")
         if choix == "1":
             Nom= input('Quel est le nom de votre contact : ')
@@ -192,7 +197,7 @@ def intéract():
             aide()
             print("\n")
             print("\n")
-
+            
 for arg in sys.argv:
         try:
             if sys.argv[1] == "new":
