@@ -3,7 +3,7 @@ import sys
 import re
 format_tel = "[0][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
 format_email = "^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-con = sqlite3.connect("contact")
+con = sqlite3.connect("contact.db")
 cur = con.cursor()
 Table = '''CREATE TABLE IF NOT EXISTS "contacts" (
 	"Nom"	TEXT,
@@ -136,8 +136,8 @@ def intéract():
                 Email_test = re.match(format_email, Email)
                 while Email_test == None:
                     print("Respecter la norme d'input : test@test.com")
-                    Telephone = input('Quel est le mail de votre contact : ')
-                    Telephone_test = re.match(format_email, Email)
+                    Email = input('Quel est le mail de votre contact : ')
+                    Email_test = re.match(format_email, Email)
             except:
                 print("")
             nouveau(Nom,Prenom,Surnom,Telephone,Email,Adresse_postale)
@@ -186,8 +186,8 @@ def intéract():
                 Email_test = re.match(format_email, Email)
                 while Email_test == None:
                     print("Respecter la norme d'input : test@test.com")
-                    Telephone = input('Quel est le mail de votre contact : ')
-                    Telephone_test = re.match(format_email, Email)
+                    Email = input('Quel est le mail de votre contact : ')
+                    Email_test = re.match(format_email, Email)
             except:
                 print("")
             MAJ(Loca_update, New_data, Nom, Prenom, Surnom, Telephone, Email, Adresse_postale)
@@ -219,8 +219,8 @@ for arg in sys.argv:
                     Email_test = re.match(format_email, Email)
                     while Email_test == None:
                         print("Respecter la norme d'input : test@test.com")
-                        Telephone = input('Quel est le mail de votre contact : ')
-                        Telephone_test = re.match(format_email, Email)
+                        Email = input('Quel est le mail de votre contact : ')
+                        Email_test = re.match(format_email, Email)
                 except:
                     print("")
                     nouveau(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
@@ -242,16 +242,16 @@ for arg in sys.argv:
             if sys.argv[1] == "search":
                 rechercher = sys.argv[3]
                 try:
-                    if sys.argv[2] == "--by-name" :
+                    if sys.argv[2] == "--by-lastname" :
                         zone = "Nom"
+                    if sys.argv[2] == "--by-firstname" :
+                        zone = "Prénom"
+                    if sys.argv[2] == "--by-nickname" :
+                        zone = "Surnom"
                     if sys.argv[2] == "--by-tel" :
                         zone = "Téléphone"
                     if sys.argv[2] == "--by-email" :
                         zone = "Email"
-                    if sys.argv[2] == "--by-nickname" :
-                        zone = "Surnom"
-                    if sys.argv[2] == "--by-firstname" :
-                        zone = "Prénom"
                     if sys.argv[2] == "--by-address" :
                         zone = "Adresse"
                     search(zone, rechercher)
@@ -280,10 +280,10 @@ for arg in sys.argv:
                     Email_test = re.match(format_email, Email)
                     while Email_test == None:
                         print("Respecter la norme d'input : test@test.com")
-                        Telephone = input('Quel est le mail de votre contact : ')
-                        Telephone_test = re.match(format_email, Email)
+                        Email = input('Quel est le mail de votre contact : ')
+                        Email_test = re.match(format_email, Email)
                 except:
-                    print("")
+                    print("la données a été modifier")
                 MAJ(Loca_update, New_data, Nom, Prenom, Surnom, Telephone, Email, Adresse_postale)
                 break
             if sys.argv[1] == "?":
