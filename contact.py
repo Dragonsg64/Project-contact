@@ -112,7 +112,8 @@ def aide():
     print("l'option search phone 'numéro de téléphone' permet de rechercher un contact en fonction de son numéro de téléphone")
     print("l'option search email 'email' permet de rechercher un contact en fonction de son adresse email")
     print("l'option search address 'adresse_postale' permet de rechercher un contact en fonction de son adresse postale")
-    
+    print("l'option update permet de mettre a jour une donnée ")
+
 def intéract():
     choix = None
     print("Bienvenue en mode intéractif")
