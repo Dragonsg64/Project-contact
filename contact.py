@@ -106,13 +106,13 @@ def aide():
     print("l'option new sert on ajoute des nouveaux contacts dans notre liste")
     print("l'option delete sert on supprime les contacts de notre liste")
     print("l'option list sert a afficher la liste de ces contacts")
-    print("l'option search --by-phone 'numéro de téléphone' permet de rechercher un contact en fonction de son numéro de téléphone")
-    print("l'option search --by-name 'nom' permet de rechercher un contact en fonction de son nom de famille")
-    print("l'option search --by-email 'email' permet de rechercher un contact en fonction de son adresse email")
-    print("l'option search --by-address 'adresse_postale' permet de rechercher un contact en fonction de son adresse postale")
-    print("l'option search --by-nickname 'surnom' permet de rechercher un contact en fonction de son surnom")
-    print("l'option search --by-firstname 'prénom' permet de rechercher un contact en fonction de son prénom")
-
+    print("l'option search name 'nom' permet de rechercher un contact en fonction de son nom de famille")
+    print("l'option search firstname 'prénom' permet de rechercher un contact en fonction de son prénom")
+    print("l'option search nickname 'surnom' permet de rechercher un contact en fonction de son surnom")
+    print("l'option search phone 'numéro de téléphone' permet de rechercher un contact en fonction de son numéro de téléphone")
+    print("l'option search email 'email' permet de rechercher un contact en fonction de son adresse email")
+    print("l'option search address 'adresse_postale' permet de rechercher un contact en fonction de son adresse postale")
+    
 def intéract():
     choix = None
     print("Bienvenue en mode intéractif")
@@ -250,17 +250,17 @@ for arg in sys.argv:
             if sys.argv[1] == "search":
                 rechercher = sys.argv[3]
                 try:
-                    if sys.argv[2] == "--by-lastname" :
+                    if sys.argv[2] == "lastname" :
                         zone = "Nom"
-                    if sys.argv[2] == "--by-firstname" :
+                    if sys.argv[2] == "firstname" :
                         zone = "Prénom"
-                    if sys.argv[2] == "--by-nickname" :
+                    if sys.argv[2] == "nickname" :
                         zone = "Surnom"
-                    if sys.argv[2] == "--by-tel" :
+                    if sys.argv[2] == "phone" :
                         zone = "Téléphone"
-                    if sys.argv[2] == "--by-email" :
+                    if sys.argv[2] == "email" :
                         zone = "Email"
-                    if sys.argv[2] == "--by-address" :
+                    if sys.argv[2] == "address" :
                         zone = "Adresse"
                     search(zone, rechercher)
                     break
