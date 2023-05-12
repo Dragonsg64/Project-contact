@@ -68,9 +68,18 @@ def search(zone, rechercher):
             select = '''SELECT * from Contacts WHERE Email = ?'''
         if zone == "Adresse_postale":
             select = '''SELECT * from Contacts WHERE Adresse_postale = ?'''
-        utile = (rechercher, )
+        utile = ('%'+rechercher+'%', )
         result = cur.execute(select, utile)
         result = cur.fetchall()
+        print("Il y a un total de ", len(result), "contacts selon votre recherche")
+        for row in result:
+            print("\n")
+            print("Nom: ", row[0])
+            print("Prénom: ", row[1])
+            print("Surnom: ", row[2])
+            print("Téléphone: ", row[3])
+            print("Email: ", row[4])
+            print("Adresse: ", row[5])
         print(result)
         con.commit()
 
@@ -249,24 +258,24 @@ for arg in sys.argv:
                 liste()
                 break
             if sys.argv[1] == "search":
-                rechercher = sys.argv[3]
                 try:
-                    if sys.argv[2] == "lastname" :
-                        zone = "Nom"
-                    if sys.argv[2] == "firstname" :
-                        zone = "Prénom"
-                    if sys.argv[2] == "nickname" :
-                        zone = "Surnom"
-                    if sys.argv[2] == "phone" :
-                        zone = "Téléphone"
-                    if sys.argv[2] == "email" :
-                        zone = "Email"
-                    if sys.argv[2] == "address" :
-                        zone = "Adresse"
-                    search(zone, rechercher)
-                    break
+                    rechercher = sys.argv[3]
                 except:
-                        print ("Veuillez respecter les commandes ou veuillez entrer dans le mode intéractif ")
+                    print ("Veuillez respecter les commandes ou veuillez entrer dans le mode intéractif ")
+                    break
+                if sys.argv[2] == "lastname" :
+                        zone = "Nom"
+                if sys.argv[2] == "firstname" :
+                    zone = "Prénom"
+                if sys.argv[2] == "nickname" :
+                    zone = "Surnom"
+                if sys.argv[2] == "phone" :
+                    zone = "Téléphone"
+                if sys.argv[2] == "email" :
+                    zone = "Email"
+                if sys.argv[2] == "address" :
+                    zone = "Adresse"
+                search(zone, rechercher)
                 break
             if sys.argv[1] == "update":
                 Loca_update = input("Quel est la colonne a modifier (Nom/Prénom/Surnom/Téléphone/Email/Adresse_postale): ")
