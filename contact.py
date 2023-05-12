@@ -2,7 +2,7 @@ import sqlite3
 import sys
 import re
 format_tel = "[0][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
-format_email = "^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+format_email = "^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$"
 con = sqlite3.connect("contact.db")
 cur = con.cursor()
 Table = '''CREATE TABLE IF NOT EXISTS "contacts" (
@@ -57,21 +57,21 @@ def liste(): #Changer le style
 def search(zone, rechercher):
     try:
         if zone == "Nom":
-            select = '''SELECT * from Contacts WHERE Nom = ?'''
+            select = '''SELECT * from Contacts WHERE Nom LIKE ?'''
         if zone == "Prénom":
-            select = '''SELECT * from Contacts WHERE Prénom = ?'''
+            select = '''SELECT * from Contacts WHERE Prénom LIKE ?'''
         if zone == "Surnom":
-            select = '''SELECT * from Contacts WHERE Surnom = ?'''
+            select = '''SELECT * from Contacts WHERE Surnom LIKE ?'''
         if zone == "Téléphone":
-            select = '''SELECT * from Contacts WHERE Téléphone = ?'''
+            select = '''SELECT * from Contacts WHERE Téléphone LIKE ?'''
         if zone == "Email":
-            select = '''SELECT * from Contacts WHERE Email = ?'''
+            select = '''SELECT * from Contacts WHERE Email LIKE ?'''
         if zone == "Adresse_postale":
-            select = '''SELECT * from Contacts WHERE Adresse_postale = ?'''
+            select = '''SELECT * from Contacts WHERE Adresse_postale LIKE ?'''
         utile = ('%'+rechercher+'%', )
         result = cur.execute(select, utile)
         result = cur.fetchall()
-        print("Il y a un total de ", len(result), "contacts selon votre recherche")
+        print("Il y a un total de", len(result), "contacts selon votre recherche")
         for row in result:
             print("\n")
             print("Nom: ", row[0])
@@ -80,7 +80,6 @@ def search(zone, rechercher):
             print("Téléphone: ", row[3])
             print("Email: ", row[4])
             print("Adresse: ", row[5])
-        print(result)
         con.commit()
 
     except sqlite3.Error as error:
@@ -101,6 +100,7 @@ def MAJ(Loca_update,New_data,Nom, Prenom, Surnom, Téléphone, Email, Adresse_po
         Cmd ='''UPDATE Contacts SET Adresse_postale = ? WHERE Nom = ? AND Prénom = ? AND Surnom = ? AND Téléphone=? AND Email=? AND Adresse_postale=? '''
     try:
         Update = (New_data,Nom, Prenom, Surnom, Téléphone, Email, Adresse_postale)
+        print("mise à jour effectuer")
         cur.execute(Cmd, Update)
         con.commit()
  
@@ -115,7 +115,7 @@ def aide():
     print("l'option new sert on ajoute des nouveaux contacts dans notre liste")
     print("l'option delete sert on supprime les contacts de notre liste")
     print("l'option list sert a afficher la liste de ces contacts")
-    print("l'option search name 'nom' permet de rechercher un contact en fonction de son nom de famille")
+    print("l'option search lastname 'nom' permet de rechercher un contact en fonction de son nom de famille")
     print("l'option search firstname 'prénom' permet de rechercher un contact en fonction de son prénom")
     print("l'option search nickname 'surnom' permet de rechercher un contact en fonction de son surnom")
     print("l'option search phone 'numéro de téléphone' permet de rechercher un contact en fonction de son numéro de téléphone")
@@ -185,8 +185,8 @@ def intéract():
             print("\n")
         if choix =="5":
             Loca_update = input("Quel est la colonne a modifier (Nom/Prénom/Surnom/Téléphone/Email/Adresse_postale): ")
-            New_data = input("Quel est la nouvelle donnée : ")
-            Nom= input('Quel est le nom de votre a mettre a jour : :')
+            New_data = input("par quoi voulez-vous le changer : ")
+            Nom= input('Quel est le nom de votre contact a mettre a jour : :')
             Prenom= input('Quel est le prénom de votre contact a mettre a jour :')
             Surnom= input('Quel est le surnom de votre contact a mettre a jour :')
             Telephone= input('Quel est le numéro de téléphone de votre contact a mettre a jour : ')
@@ -216,96 +216,95 @@ def intéract():
             print("\n")
             print("\n")
             
-for arg in sys.argv:
-        try:
-            if sys.argv[1] == "new":
-                Nom = input("Quel est le nom:")
-                Prénom = input("Quel est le prénom:")
-                Surnom = input("Quel est le Surnom:")
-                Téléphone = input("Quel est le numéro Téléphone:")
-                Email = input("Quel est l'Email:")
-                Adresse_postale = input("Quel est l'adresse postale:")
-                try: 
-                    Telephone_test = re.match(format_tel, Telephone)
-                    while Telephone_test == None:
-                        print("Respecter la norme d'input : 0x-xx-xx-xx-xx")
-                        Telephone = input('Quel est le numéro de téléphone de votre contact : ')
-                        Telephone_test = re.match(format_tel, Telephone)
-                except:
-                    print("")
-                try: 
-                    Email_test = re.match(format_email, Email)
-                    while Email_test == None:
-                        print("Respecter la norme d'input : test@test.com")
-                        Email = input('Quel est le mail de votre contact : ')
-                        Email_test = re.match(format_email, Email)
-                except:
-                    print("")
-                    nouveau(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
-                print("le nouveau contact a été ajouter")
-                break
-            if sys.argv[1] == "delete":
-                Nom= input("Quel est le nom:")
-                Prénom= input("Quel est le prénom:")
-                Surnom = input("Quel est le Surnom:")
-                Téléphone = input("Quel est le numéro Téléphone:")
-                Email = input("Quel est l'Email:")
-                Adresse_postale = input("Quel est l'adresse postale:")
-                supprimer(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
-                print("le contact a été supprimer")
-                break
-            if sys.argv[1] == "list":
-                liste()
-                break
-            if sys.argv[1] == "search":
-                try:
-                    rechercher = sys.argv[3]
-                except:
-                    print ("Veuillez respecter les commandes ou veuillez entrer dans le mode intéractif ")
-                    break
-                if sys.argv[2] == "lastname" :
-                        zone = "Nom"
-                if sys.argv[2] == "firstname" :
-                    zone = "Prénom"
-                if sys.argv[2] == "nickname" :
-                    zone = "Surnom"
-                if sys.argv[2] == "phone" :
-                    zone = "Téléphone"
-                if sys.argv[2] == "email" :
-                    zone = "Email"
-                if sys.argv[2] == "address" :
-                    zone = "Adresse"
-                search(zone, rechercher)
-                break
-            if sys.argv[1] == "update":
-                Loca_update = input("Quel est la colonne a modifier (Nom/Prénom/Surnom/Téléphone/Email/Adresse_postale): ")
-                New_data = input("Quel est la nouvelle donnée : ")
-                Nom= input('Quel est le nom de votre a mettre a jour : :')
-                Prenom= input('Quel est le prénom de votre contact a mettre a jour :')
-                Surnom= input('Quel est le surnom de votre contact a mettre a jour :')
-                Telephone= input('Quel est le numéro de téléphone de votre contact a mettre a jour : ')
-                Email= input('Quel est le mail de votre contact a mettre a jour : ')
-                Adresse_postale= input("Quel est l'adresse de votre contact a mettre a jour : ")
-                try: 
-                    Telephone_test = re.match(format_tel, Telephone)
-                    while Telephone_test == None:
-                        print("Respecter la norme d'input : 0x-xx-xx-xx-xx")
-                        Telephone = input('Quel est le numéro de téléphone de votre contact : ')
-                        Telephone_test = re.match(format_tel, Telephone)
-                except:
-                    print("")
-                try: 
-                    Email_test = re.match(format_email, Email)
-                    while Email_test == None:
-                        print("Respecter la norme d'input : test@test.com")
-                        Email = input('Quel est le mail de votre contact : ')
-                        Email_test = re.match(format_email, Email)
-                except:
-                    print("la données a été modifier")
-                MAJ(Loca_update, New_data, Nom, Prenom, Surnom, Telephone, Email, Adresse_postale)
-                break
-            if sys.argv[1] == "?":
-                aide()
-                break
+try:
+    if sys.argv[1] == "new":
+        Nom = input("Quel est le nom:")
+        Prénom = input("Quel est le prénom:")
+        Surnom = input("Quel est le Surnom:")
+        Téléphone = input("Quel est le numéro Téléphone:")
+        Email = input("Quel est l'Email:")
+        Adresse_postale = input("Quel est l'adresse postale:")
+        try: 
+            Telephone_test = re.match(format_tel, Téléphone)
+            while Telephone_test == None:
+                print("Respecter la norme d'input : 0x-xx-xx-xx-xx")
+                Téléphone = input('Quel est le numéro de téléphone de votre contact : ')
+                Telephone_test = re.match(format_tel, Téléphone)
         except:
-            intéract()
+            print("")
+        try: 
+            Email_test = re.match(format_email, Email)
+            while Email_test == None:
+                print("Respecter la norme d'input : test@test.com")
+                Email = input('Quel est le mail de votre contact : ')
+                Email_test = re.match(format_email, Email)
+        except:
+            print("")
+        nouveau(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
+        print("le nouveau contact a été ajouter")
+    if sys.argv[1] == "delete":
+        Nom= input("Quel est le nom:")
+        Prénom= input("Quel est le prénom:")
+        Surnom = input("Quel est le Surnom:")
+        Téléphone = input("Quel est le numéro Téléphone:")
+        Email = input("Quel est l'Email:")
+        Adresse_postale = input("Quel est l'adresse postale:")
+        supprimer(Nom, Prénom, Surnom, Téléphone, Email, Adresse_postale)
+        print("le contact a été supprimer")
+    if sys.argv[1] == "list":
+        liste()
+    if sys.argv[1] == "search":
+        try:
+            if(len(sys.argv) < 4):
+                print ("Veuillez respecter les commandes ou veuillez entrer dans le mode intéractif ")
+            else:
+                rechercher = sys.argv[3]
+                zone = None
+                if sys.argv[2] == "lastname" :
+                    zone = "Nom"
+                elif sys.argv[2] == "firstname" :
+                    zone = "Prénom"
+                elif sys.argv[2] == "nickname" :
+                    zone = "Surnom"
+                elif sys.argv[2] == "phone" :
+                    zone = "Téléphone"
+                elif sys.argv[2] == "email" :
+                    zone = "Email"
+                elif sys.argv[2] == "address" :
+                    zone = "Adresse"
+                else:
+                    print ("Zone de recherche inconnue")
+                if(zone):
+                    search(zone, rechercher)
+        except:
+            print("Erreur de base de données")
+    if sys.argv[1] == "update":
+        Loca_update = input("Quel est la colonne a modifier (Nom/Prénom/Surnom/Téléphone/Email/Adresse_postale): ")
+        New_data = input("par quoi voulez-vous le changer : ")
+        Nom= input('Quel est le nom de votre contact a mettre a jour : :')
+        Prenom= input('Quel est le prénom de votre contact a mettre a jour :')
+        Surnom= input('Quel est le surnom de votre contact a mettre a jour :')
+        Telephone= input('Quel est le numéro de téléphone de votre contact a mettre a jour : ')
+        Email= input('Quel est le mail de votre contact a mettre a jour : ')
+        Adresse_postale= input("Quel est l'adresse de votre contact a mettre a jour : ")
+        try: 
+            Telephone_test = re.match(format_tel, Telephone)
+            while Telephone_test == None:
+                print("Respecter la norme d'input : 0x-xx-xx-xx-xx")
+                Telephone = input('Quel est le numéro de téléphone de votre contact : ')
+                Telephone_test = re.match(format_tel, Telephone)
+        except:
+            print("")
+        try: 
+            Email_test = re.match(format_email, Email)
+            while Email_test == None:
+                print("Respecter la norme d'input : test@test.com")
+                Email = input('Quel est le mail de votre contact : ')
+                Email_test = re.match(format_email, Email)
+        except:
+            print("la données a été modifier")
+        MAJ(Loca_update, New_data, Nom, Prenom, Surnom, Telephone, Email, Adresse_postale)
+    if sys.argv[1] == "?":
+        aide()
+except:
+    intéract()
